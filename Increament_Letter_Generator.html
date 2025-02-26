@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Increament Letter Generator</title>
+    <link rel="preload" href="/fonts/SolaimanLipi.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <style>
+        
+        body, h1, h2, h3, p, ul, li, input, textarea, button {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'SolaimanLipi', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-container {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap:40px; /* 10% gap between boxes */
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            width: 30%; /* Each input takes up 30% of the container width */
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%; /* Full width within the 30% box */
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            font-size: 15px; /* Adjust size as needed */
+        }
+        input {
+        font-family: 'SolaimanLipi', sans-serif;
+        font-size: 14px; /* Adjust size as needed */
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+
+        .output {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            text-align: left;
+            max-height: 250px; /* Adjust this to your needs */
+            overflow-y: auto; /* Enable scrolling if content is too long */
+        }
+       /* Header CSS Starts Here */
+       
+        /* Header Section */
+        .header {
+            position: relative;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            padding: 20px 5px 0px 5px;
+            margin-bottom: 0px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background-color: #28a745;
+            overflow: hidden;
+            min-height: 80px;
+        }
+
+        /* Animated Moving Text */
+        .header h1 {
+            display: inline-block;
+            animation: moveText 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes moveText {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(5px); }
+        }
+
+        /* Header Floating Circles */
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            overflow: hidden;
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            background: rgba(255, 255, 255, 0.2);
+            animation: animate 15s linear infinite;
+            bottom: -50px; /* Start below the header */
+            border-radius: 50%;
+        }
+
+        /* Floating Circles Settings */
+        .circles li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+            animation-duration: 8s;
+        }
+
+        .circles li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .circles li:nth-child(3) {
+            left: 70%;
+            width: 30px;
+            height: 30px;
+            animation-delay: 4s;
+            animation-duration: 10s;
+        }
+
+        .circles li:nth-child(4) {
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 14s;
+        }
+
+        .circles li:nth-child(5) {
+            left: 80%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 1s;
+            animation-duration: 6s;
+        }
+
+        /* Floating Animation */
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-200px) rotate(720deg); /* Moves higher */
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        /* Animation style for the #animatedBtn */
+        #animatedBtn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, #28a745, #218838);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        #animatedBtn:hover {
+            background: linear-gradient(45deg, #218838, #28a745);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+            transform: translateY(-2px);
+        }
+
+        #animatedBtn:active {
+            transform: translateY(1px);
+        }
+
+        /* Animated shine effect */
+        #animatedBtn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.13);
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+
+        /* Header CSS Ends here */
+
+        @font-face {
+            font-family: 'SolaimanLipi';
+            src: url('/fonts/SolaimanLipi.ttf') format('truetype');
+            font-display: swap;
+        }
+
+    </style>
+        <!-- Include html2pdf library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Include docxtemplater and pizzip libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.28.1/docxtemplater.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>Yearly Increament Letter</h1>
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        
+        <form id="appointmentForm">
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="date">চিঠি ইস্যুর তারিখ:</label>
+                    <input type="date" id="date">
+                <script>
+                    document.getElementById('date').value = "2025-01-01";
+                </script>
+                </div>
+    
+                <div class="form-group">
+                    <label for="name">নাম:</label>
+                    <input type="text" id="name" placeholder="নাম লিখুন" required>
+                </div>
+                
+    
+                <div class="form-group">
+                    <label for="id">আইডি:</label>
+                    <input type="text" id="id" placeholder="কার্ড নাম্বার লিখুন" required>
+                </div>
+            </div>
+    
+            <div class="form-container">
+
+                <div class="form-group">
+                    <label for="designation">পদবি:</label>
+                    <input list="designationOptions" id="designation" placeholder="পূর্বের পদবি" name="designation" required>
+                    <datalist id="designationOptions">
+                        <option value="হেল্পার">
+                        <option value="অপারেটর">
+                    </datalist>
+                </div>
+
+                <div class="form-group">
+                    <label for="newDesignation">পদবি:</label>
+                    <input list="designationOptions" id="newDesignation" placeholder="নতুন পদবি" name="newDesignation" required>
+                    <datalist id="designationOptions">
+                        <option value="হেল্পার">
+                        <option value="অপারেটর">
+                    </datalist>
+                </div>
+    
+                <div class="form-group">
+                    <label for="section">সেকশন:</label>
+                    <input list="sectionOptions" id="section" placeholder="সেকশন" name="section" required>
+                    <datalist id="sectionOptions">
+                        <option value="টেবিল">
+                        <option value="কিউসি">
+                        <option value="হিট লোগো">
+                        <option value="লেবেল">
+                    </datalist>
+                </div>
+    
+            </div>
+    
+            <div class="form-container">
+                
+                <div class="form-group">
+                    <label for="totalSalary">বেতন:</label>
+                    <input type="text" id="totalSalary" placeholder="পূর্বের বেতন" pattern="[০-৯0-9]+" title="Please enter salary using Bengali or English digits" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="newSalary">বেতন:</label>
+                    <input type="text" id="newSalary" placeholder="নতুন বেতন" pattern="[০-৯0-9]+" title="Please enter salary using Bengali or English digits" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="joiningDate">যোগদানের তারিখ:</label>
+                    <input type="date" id="joiningDate" required>
+                </div>
+    
+                
+            </div>
+            
+            <button type="button" onclick="generateLetter()" style="width: 100%; margin-top: 10px;">Generate Letter</button>
+
+        </form>
+
+        <div class="output" id="output">
+            <!-- Generated letter will appear here -->
+        </div>
+
+        <button type="button" onclick="downloadPDF()">Download as PDF</button>
+        <button type="button" onclick="downloadWord()">Download as Word</button>
+        <button id="animatedBtn" type="button" onclick="printLetter()">Print Letter</button>
+        <button type="button" onclick="window.location.href='Apointment_Letter_Generator.html'">Appointment Letter Generator</button>
+    </div>
+
+    <script>
+        // Function to convert numbers to Bengali digits
+        function toBengali(number) {
+            const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            return number.toString().split('').map(digit => bengaliDigits[digit] || digit).join('');
+        }
+
+        // Function to convert Bengali digits to English digits
+        function toEnglish(number) {
+            const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            return number.toString().split('').map(digit => bengaliDigits.indexOf(digit) !== -1 ? bengaliDigits.indexOf(digit) : digit).join('');
+        }
+        
+        // Function to format amounts with commas in Bengali
+        function toBengaliAmount(amount) {
+            return amount.toLocaleString('bn-BD');
+        }
+
+        // Function to format the date in Bengali
+        function formatDate(date) {
+            const months = [
+                "জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন",
+                "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"
+            ];
+
+            const d = new Date(date);
+            const day = toBengali(d.getDate().toString().padStart(2, '0')); // Ensure two digits
+            const month = months[d.getMonth()];
+            const year = toBengali(d.getFullYear());
+
+            return `${day} ${month}, ${year}`;
+        }
+
+
+        // Function to calculate salary breakdown
+        function calculateSalary(totalSalary) {
+            const medicalAllowance = 2375;
+            const basicSalary = Math.round((totalSalary - medicalAllowance) / 1.5);
+            const houseRent = totalSalary - basicSalary - medicalAllowance;
+
+            return {
+                basicSalary: toBengaliAmount(basicSalary),
+                houseRent: toBengaliAmount(houseRent),
+                medicalAllowance: toBengaliAmount(medicalAllowance),
+                totalSalary: toBengaliAmount(totalSalary),
+            };
+        }
+
+        // Function to calculate salary breakdown
+        function calculateNewSalary(newSalary) {
+            const newMedicalAllowance = 2375;
+            const newBasicSalary = Math.round((newSalary - newMedicalAllowance) / 1.5);
+            const newHouseRent = newSalary - newBasicSalary - newMedicalAllowance;
+
+            return {
+                newBasicSalary: toBengaliAmount(newBasicSalary),
+                newHouseRent: toBengaliAmount(newHouseRent),
+                newMedicalAllowance: toBengaliAmount(newMedicalAllowance),
+                newSalary: toBengaliAmount(newSalary),
+            };
+        }
+
+        // Function to generate the letter
+        function generateLetter() {
+    // Get form values
+    const name = document.getElementById('name').value;
+    const id = document.getElementById('id').value;
+    const date = formatDate(document.getElementById('date').value);
+    const joiningDate = formatDate(document.getElementById('joiningDate').value);
+    const designation = document.getElementById('designation').value;
+    const newDesignation = document.getElementById('newDesignation').value;
+    const section = document.getElementById('section').value;
+    const totalSalaryInput = document.getElementById('totalSalary').value;
+    const totalNewSalaryInput = document.getElementById('newSalary').value;
+    
+    
+    // Convert Bengali digits to English digits for calculation
+    const totalSalary = parseFloat(toEnglish(totalSalaryInput));
+    const newSalary = parseFloat(toEnglish(totalNewSalaryInput));
+
+    // Validate total salary
+    if (isNaN(totalSalary) || totalSalary <= 12799) {
+        alert("Please enter a valid total salary.");
+        return;
+    }
+
+    // Calculate salary breakdown
+    const salary = calculateSalary(totalSalary);
+    const newSalaryData = calculateNewSalary(newSalary);
+
+    // Default letter structure
+    const letter = `
+     
+    <body>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1.5;"><strong><span style="font-size:21px;line-height:115%;font-family:SolaimanLipi;"> এস, জে ইন্ডাস্ট্রিয়াল (বিডি) লিমিটেড</span></strong></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1.5;"><span style="font-size:16px;font-family:SolaimanLipi;">চট্টগ্রাম রপ্তানী প্রক্রিয়াজাতকরণ এলাকা</span></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1.5;"><span style="font-size:16px;font-family:SolaimanLipi;">প্লট #৫৬-৫৭, সেক্টর #০৮, চট্টগ্রাম, বাংলাদেশ</span></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1.5;"><span style="font-size:16px;font-family:SolaimanLipi;">ফোনঃ ০৮৮-০২-৩৩৩৩৪২০৭৫</span></p>
+            <hr>
+            <table style="width: 100%; margin-top:25px; margin-bottom: 15px;">
+                <tbody>
+                    <tr>
+                        <td style="width: 23%;"><span style="font-size: 16px; font-family: SolaimanLipi;">তারিখ</span></td>
+                        <td style="width: 777%;"><span style="font-size: 16px; font-family: SolaimanLipi;">:&nbsp;${date}</span></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 23%;"><span style="font-size: 16px; font-family: SolaimanLipi;">নাম</span></td>
+                        <td style="width: 77%;"><span style="font-size: 16px; font-family: SolaimanLipi;">:&nbsp;${name}</span></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 23%;"><span style="font-size: 16px; font-family: SolaimanLipi;">সেকশন</span></td>
+                        <td style="width: 77.4316%;"><span style="font-size: 16px; font-family: SolaimanLipi;">:&nbsp;${section}</span></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 23%;"><span style="font-size: 16px; font-family: SolaimanLipi;">কার্ড নং</span></td>
+                        <td style="width: 77%;"><span style="font-size: 16px; font-family: SolaimanLipi;">:&nbsp;${id}</span></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 23%;"><span style="font-size: 16px; font-family: SolaimanLipi;">চাকরিতে যোগদানের তারিখ</span></td>
+                        <td style="width: 77%;"><span style="font-size: 16px; font-family: SolaimanLipi;">:&nbsp;${joiningDate}</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-family:SolaimanLipi;"><strong><span style="font-size: 16px;">বিষয়ঃ বাৎসরিক বেতন বৃদ্ধিকরণ ও পদোন্নতির প্রস্তাবনা। &nbsp;</span></strong></span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-family: SolaimanLipi; font-size: 16px;">জনাব/জনাবা,&nbsp;</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-family: SolaimanLipi; font-size: 16px;">আপনার অক্লান্ত পরিশ্রম, পেশাদারি দক্ষতা, এবং প্রতিষ্ঠানের লক্ষ্য অর্জনে অবদানের স্বীকৃতি স্বরূপ, কর্তৃপক্ষ সানন্দে আপনাকে পদোন্নতি ও বাৎসরিক বেতন বৃদ্ধি প্রদানের সিদ্ধান্ত গ্রহণ করেছেন। উক্ত সংশোধনী ${date} ইং তারিখ থেকে কার্যকর হবে।</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-family: SolaimanLipi; font-size: 16px;">&nbsp;</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-family: SolaimanLipi; font-size: 16px;">নিম্নে আপনার বেতন ও অন্যান্য সুবিধার বিস্তারিত তালিকা প্রদান করা হলো:</span></p>
+            <table style="width: 100%; margin: auto; border: 1px solid black; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="width: 50%; border: 1px solid black; padding: 8px;" colspan="2">
+                            <div style="text-align: center;"><span style="font-size: 16px; font-family: SolaimanLipi;">বাস্তবায়নের পূর্বে &nbsp;</span></div>
+                        </th>
+                        <th style="width: 50%; border: 1px solid black; padding: 8px;" colspan="2">
+                            <div style="text-align: center;"><span style="font-size: 16px; font-family: SolaimanLipi;">বাস্তবায়নের পরে &nbsp;</span></div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-left: 10px;"><span style="font-size: 16px; font-family: SolaimanLipi;">পদবি</span></td>
+                        <td style="width: 25.000%; border: 1px solid black; padding-right: 10px;">
+                            <div style="text-align: right;"><span style="font-size: 16px; font-family: SolaimanLipi;">${designation}</span></div>
+                        </td>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-left: 10px;"><span style="font-size: 16px; font-family: SolaimanLipi;">পদবি&nbsp;</span></td>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-right: 10px;">
+                            <div style="text-align: right;"><span style="font-size: 16px; font-family: SolaimanLipi;">${newDesignation}</span></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-left: 10px;"><span style="font-size: 16px; font-family: SolaimanLipi;">মূল বেতন</span></td>
+                        <td style="width: 25.0378%; border: 1px solid black; padding-right: 10px;">
+                            <div style="text-align: right;"><span style="font-size: 16px; font-family: SolaimanLipi;">${salary.basicSalary}.০০</span></div>
+                        </td>
+                        <td style="width: 25.000%; border: 1px solid black; padding-left: 10px;"><span style="font-size: 16px; font-family: SolaimanLipi;">মূল বেতন&nbsp;</span></td>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-right: 10px;">
+                            <div style="text-align: right;"><span style="font-size: 16px; font-family: SolaimanLipi;">${newSalaryData.newBasicSalary}.০০</span></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-left: 10px;"><span style="font-size: 16px; font-family: SolaimanLipi;">বাড়ি ভাড়া</span></td>
+                        <td style="width: 25.0378%; border: 1px solid black; padding-right: 10px;">
+                            <div style="text-align: right;"><span style="font-size: 16px; font-family: SolaimanLipi;">${salary.houseRent}.০০</span></div>
+                        </td>
+                        <td style="width: 25.000%; border: 1px solid black; padding-left: 10px;"><span style="font-size: 16px; font-family: SolaimanLipi;">বাড়ি ভাড়া &nbsp;</span></td>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-right: 10px;">
+                            <div style="text-align: right;"><span style="font-size: 16px; font-family: SolaimanLipi;">${newSalaryData.newHouseRent}.০০</span></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-left: 10px;"><span style="font-size: 16px; font-family: SolaimanLipi;">চিকিৎসা ভাতা</span></td>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-right: 10px;">
+                            <div style="text-align: right;"><span style="font-size: 16px; font-family: SolaimanLipi;">${salary.medicalAllowance}.০০</span></div>
+                        </td>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-left: 10px;"><span style="font-size: 16px; font-family: SolaimanLipi;">চিকিৎসা ভাতা&nbsp;</span></td>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-right: 10px;">
+                            <div style="text-align: right;"><span style="font-size: 16px; font-family: SolaimanLipi;">${newSalaryData.newMedicalAllowance}.০০</span></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-left: 10px;"><span style="font-size: 16px; font-family: SolaimanLipi;">সর্বমোট বেতন</span></td>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-right: 10px;">
+                            <div style="text-align: right;"><span style="font-size: 16px; font-family: SolaimanLipi;">${salary.totalSalary}.০০</span></div>
+                        </td>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-left: 10px;"><span style="font-size: 16px; font-family: SolaimanLipi;">সর্বমোট বেতন &nbsp;</span></td>
+                        <td style="width: 25.0000%; border: 1px solid black; padding-right: 10px;">
+                            <div style="text-align: right;"><span style="font-size: 16px; font-family: SolaimanLipi;">${newSalaryData.newSalary}.০০</span></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-size: 16px; font-family: SolaimanLipi;"><br></span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-family: SolaimanLipi; font-size: 16px;">আমরা দৃঢ়ভাবে বিশ্বাস করি যে, আপনার দক্ষতা ও নেতৃত্বগুণ প্রতিষ্ঠানের অব্যাহত উন্নয়নে গুরুত্বপূর্ণ ভূমিকা রাখবে। আপনার ভবিষ্যৎ সাফল্য ও উৎকর্ষতা কামনা করছি। &nbsp;&nbsp;</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-family: SolaimanLipi; font-size: 16px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+            <table style="width: 100%; font-size: 13px; font-family: SolaimanLipi; border-spacing: 0px; margin-right: calc(0%);">
+                <tbody>
+                    <tr>
+                        <td style="text-align: left; width: 49.7021%;">
+                            <p style='font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-family: SolaimanLipi; font-size: 16px;">ধন্যবাদান্তে,</span></p>
+                            <p style='font-size:11.0pt;font-family:"Calibri",sans-serif;'><br></p>
+                            <p style='font-size:11.0pt;font-family:"Calibri",sans-serif;'><br></p>
+                            <p style='font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-size: 16px;"><br></span></p>
+                            <p style="font-size: 11pt; font-family: Calibri, sans-serif;"><span style="font-family:SolaimanLipi;"><span style="font-family: SolaimanLipi; color: rgb(217, 217, 217); font-size: 16px;">.......................................................</span></span></p>
+                            <p style="font-size: 11pt; font-family: Calibri, sans-serif;"><span style="font-family:SolaimanLipi;"><span style="font-family: SolaimanLipi; font-size: 16px;">ব্যবস্থাপনা পরিচালক,</span></span></p><span style="font-family: SolaimanLipi; font-size: 16px;">এস, জে ইন্ডাস্ট্রিয়াল (বিডি) লিমিটেড</span><span style="font-size: 16px;"><br></span>
+                        </td>
+                        <td style="text-align: right; width: 50.1622%;"><span style="font-size: 16px;">আমি আনন্দের সাথে এই পত্র গ্রহণ করলাম।<br><br>&nbsp;<br></span><br><span style="font-family:SolaimanLipi;"><span style="font-size: 16px; line-height: 2;">স্বাক্ষর: </span><span style="color: rgb(217, 217, 217); font-size: 16px; line-height: 2;">...................................................</span></span><br><span style="font-size: 16px; line-height: 2;">&nbsp;&nbsp;</span><span style="font-family:SolaimanLipi;"><span style="color: rgb(0, 0, 0); font-size: 16px; line-height: 2;">অনুলিপিঃ ১) কর্মচারী&nbsp; &nbsp;&nbsp;২) ব্যক্তিগত নথি&nbsp;&nbsp;</span></span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><span style="font-size: 16px;"><br></span></p>
+            <p><span style="font-size: 16px;"><br></span></p>
+            <p><br></p>
+        </body>
+
+            `;
+
+
+    // Display the generated letter
+    document.getElementById('output').innerHTML = letter;
+}
+
+
+        // Function to download as PDF
+        function downloadPDF() {
+            const element = document.getElementById('output');
+            const opt = {
+                margin: 10,
+                filename: 'appointment_letter.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Generate PDF
+            html2pdf().set(opt).from(element).save();
+        }
+
+        // Function to download as Word
+        async function downloadWord() {
+            // Fetch the template .docx file
+            const response = await fetch('template.docx'); // Replace with the path to your template file
+            const templateFile = await response.arrayBuffer();
+
+            // Prepare the data to replace placeholders in the template
+            const data = {
+                name: document.getElementById('name').value,
+                id: document.getElementById('id').value,
+                date: formatDate(document.getElementById('date').value),
+                designation: document.getElementById('designation').value,
+                newDesignation: document.getElementById('newDesignation').value,
+                section: document.getElementById('section').value,
+                fatherHusband: document.getElementById('fatherHusband').value,
+                totalSalary: document.getElementById('totalSalary').value,
+                newSalary: document.getElementById('newSalary').value,
+                // Add more fields as needed
+            };
+
+            // Load the template into docxtemplater
+            const zip = new PizZip(templateFile);
+            const doc = new Docxtemplater().loadZip(zip);
+
+            // Replace placeholders with data
+            doc.setData(data);
+
+            try {
+                // Render the document
+                doc.render();
+            } catch (error) {
+                console.error("Error rendering document:", error);
+                return;
+            }
+
+            // Generate the .docx file
+            const out = doc.getZip().generate({ type: 'blob' });
+
+            // Save the file
+            saveAs(out, 'appointment_letter.docx');
+        }
+
+        // Function to print the letter
+        function printLetter() {
+            const printContents = document.getElementById('output').innerHTML;
+            const originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload(); // Reload to restore the original content
+        }
+    </script>
+</body>
+</html>

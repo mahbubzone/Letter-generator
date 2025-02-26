@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Letter Generator</title>
+    <link rel="preload" href="/fonts/SolaimanLipi.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <style>
+        
+        body, h1, h2, h3, p, ul, li, input, textarea, button {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'SolaimanLipi', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-container {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap:40px; /* 10% gap between boxes */
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            width: 30%; /* Each input takes up 30% of the container width */
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%; /* Full width within the 30% box */
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            font-size: 16px; /* Adjust size as needed */
+        }
+        input {
+        font-family: 'SolaimanLipi', sans-serif;
+        font-size: 14px; /* Adjust size as needed */
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .output {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            text-align: left;
+            max-height: 250px; /* Adjust this to your needs */
+            overflow-y: auto; /* Enable scrolling if content is too long */
+        }
+       /* Header CSS Starts Here */
+       
+        /* Header Section */
+        .header {
+            position: relative;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            padding: 20px 5px 0px 5px;
+            margin-bottom: 0px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background-color: #28a745;
+            overflow: hidden;
+            min-height: 80px;
+        }
+
+        /* Animated Moving Text */
+        .header h1 {
+            display: inline-block;
+            animation: moveText 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes moveText {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(5px); }
+        }
+
+        /* Header Floating Circles */
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            overflow: hidden;
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            background: rgba(255, 255, 255, 0.2);
+            animation: animate 15s linear infinite;
+            bottom: -50px; /* Start below the header */
+            border-radius: 50%;
+        }
+
+        /* Floating Circles Settings */
+        .circles li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+            animation-duration: 8s;
+        }
+
+        .circles li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .circles li:nth-child(3) {
+            left: 70%;
+            width: 30px;
+            height: 30px;
+            animation-delay: 4s;
+            animation-duration: 10s;
+        }
+
+        .circles li:nth-child(4) {
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 14s;
+        }
+
+        .circles li:nth-child(5) {
+            left: 80%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 1s;
+            animation-duration: 6s;
+        }
+
+        /* Floating Animation */
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-200px) rotate(720deg); /* Moves higher */
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        /* Animation style for the #animatedBtn */
+        #animatedBtn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, #28a745, #218838);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        #animatedBtn:hover {
+            background: linear-gradient(45deg, #218838, #28a745);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+            transform: translateY(-2px);
+        }
+
+        #animatedBtn:active {
+            transform: translateY(1px);
+        }
+
+        /* Animated shine effect */
+        #animatedBtn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.13);
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+
+        /* Header CSS Ends here */
+
+        @font-face {
+            font-family: 'SolaimanLipi';
+            src: url('/fonts/SolaimanLipi.ttf') format('truetype');
+            font-display: swap;
+        }
+
+    </style>
+    <!-- Include html2pdf library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Include docxtemplater and pizzip libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.28.1/docxtemplater.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>Appointment Letter Generator</h1>
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        
+        <form id="appointmentForm">
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="date">তারিখ:</label>
+                    <input type="date" id="date" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="name">নাম:</label>
+                    <input type="text" id="name" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="fatherHusband">পিতা/স্বামী:</label>
+                    <input type="text" id="fatherHusband" required>
+                </div>
+            </div>
+    
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="id">কার্ড নং:</label>
+                    <input type="text" id="id" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="designation">পদবি:</label>
+                    <input list="designationOptions" id="designation" name="designation" required>
+                    <datalist id="designationOptions">
+                        <option value="হেল্পার">
+                        <option value="অপারেটর">
+                    </datalist>
+                </div>
+    
+                <div class="form-group">
+                    <label for="section">সেকশন:</label>
+                    <input list="sectionOptions" id="section" name="section" required>
+                    <datalist id="sectionOptions">
+                        <option value="টেবিল">
+                        <option value="কিউসি">
+                        <option value="হিট লোগো">
+                        <option value="লেবেল">
+                    </datalist>
+                </div>
+            </div>
+    
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="transportAllowance">ট্রান্সপোর্ট ভাতা:</label>
+                    <select id="transportAllowance" required>
+                        <option value="Yes">Yes</option>
+                        <option value="No" selected>No</option> <!-- Now "No" is the default -->
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="overtime">ওভারটাইম:</label>
+                    <select id="overtime" required>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="totalSalary">বেতন:</label>
+                    <input type="text" id="totalSalary" pattern="[০-৯0-9]+" title="Please enter salary using Bengali or English digits" required>
+                </div>
+            </div>
+            
+            <button type="button" onclick="generateLetter()" style="width: 100%; margin-top: 10px;">Generate Letter</button>
+
+        </form>
+
+        <div class="output" id="output">
+            <!-- Generated letter will appear here -->
+        </div>
+
+        <button type="button" onclick="downloadPDF()">Download as PDF</button>
+        <button type="button" onclick="downloadWord()">Download as Word</button>
+        <button id="animatedBtn" type="button" onclick="printLetter()">Print Letter</button>
+        <button type="button" onclick="window.location.href='Increament_Letter_Generator.html'">Increament Letter Generator</button>
+
+    </div>
+
+    <script>
+        // Function to convert numbers to Bengali digits
+        function toBengali(number) {
+            const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            return number.toString().split('').map(digit => bengaliDigits[digit] || digit).join('');
+        }
+
+        // Function to convert Bengali digits to English digits
+        function toEnglish(number) {
+            const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            return number.toString().split('').map(digit => bengaliDigits.indexOf(digit) !== -1 ? bengaliDigits.indexOf(digit) : digit).join('');
+        }
+        
+        // Function to format amounts with commas in Bengali
+        function toBengaliAmount(amount) {
+            return amount.toLocaleString('bn-BD');
+        }
+
+        // Function to format the date in Bengali
+        function formatDate(date) {
+            const d = new Date(date);
+            const day = toBengali(d.getDate().toString().padStart(2, '0'));
+            const month = toBengali((d.getMonth() + 1).toString().padStart(2, '0'));
+            const year = toBengali(d.getFullYear());
+            return `${day}/${month}/${year}`;
+        }
+
+        // Function to calculate salary breakdown
+        function calculateSalary(totalSalary) {
+            const medicalAllowance = 2375;
+            const basicSalary = Math.round((totalSalary - medicalAllowance) / 1.5);
+            const houseRent = totalSalary - basicSalary - medicalAllowance;
+
+            return {
+                basicSalary: toBengaliAmount(basicSalary),
+                houseRent: toBengaliAmount(houseRent),
+                medicalAllowance: toBengaliAmount(medicalAllowance),
+                totalSalary: toBengaliAmount(totalSalary),
+            };
+        }
+
+        // Function to generate the letter
+        function generateLetter() {
+    // Get form values
+    const name = document.getElementById('name').value;
+    const id = document.getElementById('id').value;
+    const date = formatDate(document.getElementById('date').value);
+    const designation = document.getElementById('designation').value;
+    const section = document.getElementById('section').value;
+    const fatherHusband = document.getElementById('fatherHusband').value;
+    const totalSalaryInput = document.getElementById('totalSalary').value;
+    
+    // Get values for Transport Allowance and Overtime
+    const transportAllowance = document.getElementById('transportAllowance').value;  // "Yes" or "No"
+    const overtime = document.getElementById('overtime').value;  // "Yes" or "No"
+
+    // Convert Bengali digits to English digits for calculation
+    const totalSalary = parseFloat(toEnglish(totalSalaryInput));
+
+    // Validate total salary
+    if (isNaN(totalSalary) || totalSalary <= 12799) {
+        alert("Please enter a valid total salary.");
+        return;
+    }
+
+    // Calculate salary breakdown
+    const salary = calculateSalary(totalSalary);
+
+    // Default letter structure
+    let letter = ""; // Initialize letter as an empty string
+
+if (transportAllowance === "No" && overtime === "Yes") {
+    // Letter for Transport Allowance: No, Overtime: Yes
+    letter = `
+       
+        <body>
+            <p style='margin:0in;margin-bottom:.0001pt;font-size:15px;font-family:"Calibri",sans-serif;text-align:center;line-height:115%;'><strong><span style="font-size:21px;line-height:115%;font-family:SolaimanLipi;">এস, জে ইন্ডাস্ট্রিয়াল (বিডি) লিমিটেড</span></strong></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px; font-family: SolaimanLipi;">চট্টগ্রাম রপ্তানী প্রক্রিয়াজাতকরণ এলাকা</span></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px;"><span style="font-family: SolaimanLipi;">প্লট #৫৬-৫৭, সেক্টর #০৮, চট্টগ্রাম, বাংলাদেশ</span></span></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px; font-family: SolaimanLipi;">ফোনঃ ০৮৮-০২-৩৩৩৩৪২০৭৫</span></p>
+            <hr>
+            <div style="position: relative; width: 100%; text-align: center;">
+                <p style="display: inline-block; border: 1px solid black; border-radius: 5px; padding: 4px 8px; font-size: 16px; font-family: SolaimanLipi; font-weight: bold; margin: 0px; line-height: 1;">নিয়োগপত্র</p>
+                <p style="position: absolute; right: 0px; top: 0px; font-size: 13px; font-family: SolaimanLipi; margin: 0px; line-height: 1;">তারিখঃ ${date}</p>
+            </div>
+            <p style="margin: 0in 0in 8pt 211.5pt; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -211.5pt; line-height: 1;"><br></p>
+            <table style="width: 100%; font-size: 13px; font-family: SolaimanLipi;">
+                <tbody>
+                    <tr>
+                        <td style="width: 50%; text-align: left;">নাম &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: ${name}</td>
+                        <td style="width: 50%; text-align: left; padding: 5px;">কার্ড নং : ${id}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%; text-align: left;">পিতা/স্বামী : ${fatherHusband}</td>
+                        <td style="width: 50%; text-align: left; padding: 5px;">সেকশন : ${section}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 11pt; font-family: Calibri, sans-serif; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt; font-size: 11pt; font-family: Calibri, sans-serif; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">জনাব/জনাবা,</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:5.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'><span style="font-size:12px;font-family:SolaimanLipi;">আপনার গৃহীত সাক্ষাৎকারের/পরীক্ষার প্রেক্ষিতে আপনাকে ${date} &nbsp;ইং তারিখ থেকে <strong>${designation}</strong> পদে ${section} সেকশনে নিম্নে বর্ণিত শর্ত স্বাপেক্ষে আমাদের শিল্প প্রতিষ্ঠানে নিয়োগ দেয়া হলো -&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১. &nbsp; &nbsp;আপনাকে স্থায়ী পদের বিপরীতে এই নিয়োগপত্র ইস্যুর তারিখ থেকে ৩ (তিন) মাসের জন্য প্রাথমিকভাবে নিয়োগ প্রদান করা হবে। তবে সন্তোষজনক না হলে কর্তৃপক্ষ আরো ৩ (তিন) মাস সময়কাল বৃদ্ধি করতে পারে। এই অস্থায়ী নিয়োগ পর্যায়ে কর্তৃপক্ষ কোন কারণ প্রদর্শন ব্যতীত কিংবা কোন আর্থিক সুবিধা/ক্ষতিপূরণ প্রদান ব্যতীত আপনাকে চাকরিচ্যুত করতে পারে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">২. &nbsp; &nbsp;পরীক্ষাধীন সময় সন্তোষজনকভাবে পরিসমাপ্তির পর আপনি স্থায়ী হিসেবে বিবেচিত হবেন, যা পত্রের মাধ্যমে অবহিত করা হবে।&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৩. &nbsp; &nbsp;আপনি মূল বেতন <strong>${salary.basicSalary}/-</strong> টাকা, বাড়ি ভাড়া <strong>${salary.houseRent}/-</strong> টাকা, চিকিৎসা ভাতা <strong>${salary.medicalAllowance}/-</strong> টাকা সহ সর্বমোট <strong>${salary.totalSalary}/-</strong> টাকা পাবেন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৪. &nbsp; &nbsp;আপনি যদি মাসে একদিনও অনুপস্থিত না থাকেন তাহলে ৩০০/- টাকা হাজিরা ভাতা হিসেবে বেতনের সাথে প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৫. &nbsp; &nbsp;আপনার চাকরির যাবতীয় নিয়মাবলী বেপজা নির্দেশিকা ও বাংলাদেশ গেজেট (অতিরিক্ত সংখ্যা), কর্তৃপক্ষ কর্তৃক প্রকাশিত ২০১৯ সালের বেপজা আইন অনুযায়ী পরিচালিত হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৬. &nbsp; &nbsp;৮ (আট) ঘন্টার বেশি কাজ ওভার টাইম হিসেবে গণ্য করা হয়। মূল বেতনের দ্বিগুণ হারে ওভার টাইম হিসাব করে চলতি মাসের বেতনের সাথে ওভার টাইমের টাকা প্রদান করা হয়ে থাকে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৭.&nbsp; &nbsp; কোনো স্থায়ী শ্রমিক স্বেচ্ছায় চাকরি থেকে অব্যাহতি নিতে চাইলে&nbsp;</span><span style='font-size:12px;font-family:"Times New Roman",serif;'>&lsquo;</span><span style="font-size:12px;font-family:SolaimanLipi;">বেপজা আইন ২০১৯</span><span style='font-size:12px;font-family:"Times New Roman",serif;'>&rsquo;</span><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;অনুযায়ী অন্তত ১ (এক) মাস আগে কর্তৃপক্ষকে লিখিতভাবে অবহিত করতে হবে। চাকরির ক্ষেত্রে ছাঁটাই, অপসারণ, বরখাস্ত, চাকুরির অবসান ইত্যাদি বেপজা নির্দেশিকা মোতাবেক করা হবে। যদি কোন শ্রমিক ০১ (এক) মাসের অগ্রিম নোটিশ ব্যতীত চাকুরি হতে অব্যাহতি চায় তাহলে তার ০১ (এক) মাসের মূল বেতনের সমপরিমাণ টাকা কোম্পানি বেপজা নির্দেশিকা অনুযায়ী কর্তন করবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৮. &nbsp; &nbsp;কারখানার কাজের সময়সীমা: সকাল ৭.০০ টা থেকে বিকাল ৪.০০ টা পর্যন্ত মোট ৮ (আট) ঘণ্টা। দুপুরের খাবারের জন্য ০১ (এক) ঘণ্টা বিরতি।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৯. &nbsp; &nbsp;দুপুরের খাবার কোম্পানি নিজ খরচে সরবরাহ করে থাকে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১০. &nbsp; আপনাকে আইডি কার্ড/পাঞ্চ কার্ড প্রদান করা হবে। কারখানায় প্রবেশ এবং প্রস্থানের সময় কার্ড পাঞ্চ করতে হবে এবং সার্বক্ষণিক দৃশ্যমানভাবে গলায় পরিধান করতে হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১১. &nbsp; আপনার চাকরি কোম্পানির প্রচলিত বিধি-বিধান মোতাবেক পরিচালিত হবে। আপনি চাকরিতে অবস্থানকালে কোম্পানির স্বার্থসংক্রান্ত সকল বিষয়ে গোপনীয়তা রক্ষা করতে বাধ্য থাকবেন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১২. &nbsp; কোম্পানির প্রয়োজনে কর্তৃপক্ষ আপনাকে যে কোন বিভাগে স্থানান্তর বা বদলি করতে পারবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৩. &nbsp;বার্ষিক ছুটিসমূহ: (ক) নৈমিত্তিক ছুটি - ১০ দিন, (খ) অসুস্থতাজনিত ছুটি - ১৪ দিন, এবং (গ) অর্জিত ছুটি - ১৭ দিন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৪. &nbsp; বছরে ২টি উৎসব বোনাস বেপজা আইন অনুযায়ী মূল বেতনের সমপরিমাণ প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৫. &nbsp; প্রতি মাসের বেতন পরবর্তী মাসের প্রথম ৭ কর্মদিবসের মধ্যে প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৬. &nbsp; বেপজার নিয়ম অনুসারে বার্ষিক ন্যূনতম মুল বেতনের ৫% থেকে ১০% পর্যন্ত বৃদ্ধি করা হয় ।&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৭. &nbsp; এতদ্বারা উল্লেখ করা হচ্ছে যে, উপরে উল্লিখিত সকল নিয়ম-কানুন বেপজা আইন অনুযায়ী পরিচালিত হবে। এছাড়া, কোম্পানী কর্তৃক উন্নয়নমূলক কোন নিয়ম-কানুন চালু করা হলে তা মেনে চলতে হবে।</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:5.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-size:12px;line-height:107%;font-family:SolaimanLipi;">আমি উল্লেখিত শর্তাবলী মেনে নিয়ে এই নিয়োগপত্রে স্বাক্ষর করে অনুলিপি গ্রহণ করলাম।</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><br></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><br></p>
+            <table style="width: 100%; font-size: 13px; font-family: SolaimanLipi; border-spacing: 0px; margin-right: calc(0%);">
+                        <tbody>
+                            <tr>
+                                <td style="text-align: left; width: 50%;"><span style="color: rgb(209, 213, 216);">...............................................................<br></span><span style="line-height: 1.5;">ধন্যবাদান্তে,</span><br><span style="line-height: 1.5;">ব্যবস্থাপনা পরিচালক,</span><br><span style="line-height: 1.5;">এস, জে ইন্ডাস্ট্রিয়াল (বিডি) লিমিটেড</span></td>
+                                <td style="text-align: right; width: 50%;"><br><span style="line-height: 1.5;">স্বাক্ষর: <span style="color: rgb(209, 213, 216);">................................................</span></span><br><br><span style="line-height: 1.5;">পূর্ণ নাম: <span style="color: rgb(209, 213, 216);">..............................................</span></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+        </body>
+
+    `;
+} else if (transportAllowance === "Yes" && overtime === "Yes") {
+    // Letter for Transport Allowance: Yes, Overtime: Yes
+    letter = `
+        
+        <body>
+            <p style='margin:0in;margin-bottom:.0001pt;font-size:15px;font-family:"Calibri",sans-serif;text-align:center;line-height:115%;'><strong><span style="font-size:21px;line-height:115%;font-family:SolaimanLipi;">এস, জে ইন্ডাস্ট্রিয়াল (বিডি) লিমিটেড</span></strong></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px; font-family: SolaimanLipi;">চট্টগ্রাম রপ্তানী প্রক্রিয়াজাতকরণ এলাকা</span></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px;"><span style="font-family: SolaimanLipi;">প্লট #৫৬-৫৭, সেক্টর #০৮, চট্টগ্রাম, বাংলাদেশ</span></span></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px; font-family: SolaimanLipi;">ফোনঃ ০৮৮-০২-৩৩৩৩৪২০৭৫</span></p>
+            <hr>
+            <div style="position: relative; width: 100%; text-align: center;">
+                <p style="display: inline-block; border: 1px solid black; border-radius: 5px; padding: 4px 8px; font-size: 16px; font-family: SolaimanLipi; font-weight: bold; margin: 0px; line-height: 1;">নিয়োগপত্র</p>
+                <p style="position: absolute; right: 0px; top: 0px; font-size: 13px; font-family: SolaimanLipi; margin: 0px; line-height: 1;">তারিখঃ ${date}</p>
+            </div>
+            <p style="margin: 0in 0in 8pt 211.5pt; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -211.5pt; line-height: 1;"><br></p>
+            <table style="width: 100%; font-size: 13px; font-family: SolaimanLipi;">
+                <tbody>
+                    <tr>
+                        <td style="width: 50%; text-align: left;">নাম &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: ${name}</td>
+                        <td style="width: 50%; text-align: left; padding: 5px;">কার্ড নং : ${id}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%; text-align: left;">পিতা/স্বামী : ${fatherHusband}</td>
+                        <td style="width: 50%; text-align: left; padding: 5px;">সেকশন : ${section}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 11pt; font-family: Calibri, sans-serif; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt; font-size: 11pt; font-family: Calibri, sans-serif; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">জনাব/জনাবা,</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:5.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'><span style="font-size:12px;font-family:SolaimanLipi;">আপনার গৃহীত সাক্ষাৎকারের/পরীক্ষার প্রেক্ষিতে আপনাকে ${date} &nbsp;ইং তারিখ থেকে <strong>${designation}</strong> পদে ${section} সেকশনে নিম্নে বর্ণিত শর্ত স্বাপেক্ষে আমাদের শিল্প প্রতিষ্ঠানে নিয়োগ দেয়া হলো -&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১. &nbsp; &nbsp;আপনাকে স্থায়ী পদের বিপরীতে এই নিয়োগপত্র ইস্যুর তারিখ থেকে ৩ (তিন) মাসের জন্য প্রাথমিকভাবে নিয়োগ প্রদান করা হবে। তবে সন্তোষজনক না হলে কর্তৃপক্ষ আরো ৩ (তিন) মাস সময়কাল বৃদ্ধি করতে পারে। এই অস্থায়ী নিয়োগ পর্যায়ে কর্তৃপক্ষ কোন কারণ প্রদর্শন ব্যতীত কিংবা কোন আর্থিক সুবিধা/ক্ষতিপূরণ প্রদান ব্যতীত আপনাকে চাকরিচ্যুত করতে পারে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">২. &nbsp; &nbsp;পরীক্ষাধীন সময় সন্তোষজনকভাবে পরিসমাপ্তির পর আপনি স্থায়ী হিসেবে বিবেচিত হবেন, যা পত্রের মাধ্যমে অবহিত করা হবে।&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৩. &nbsp; &nbsp;আপনি মূল বেতন <strong>${salary.basicSalary}/-</strong> টাকা, বাড়ি ভাড়া <strong>${salary.houseRent}/-</strong> টাকা, চিকিৎসা ভাতা <strong>${salary.medicalAllowance}/-</strong> টাকা সহ সর্বমোট <strong>${salary.totalSalary}/-</strong> টাকা পাবেন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৪. &nbsp; &nbsp;আপনি যদি মাসে একদিনও অনুপস্থিত না থাকেন তাহলে ৩০০/- টাকা হাজিরা ভাতা হিসেবে বেতনের সাথে প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৫. &nbsp; <span style="font-size:12px;font-family:SolaimanLipi;">প্রতি মাসে আপনার বেতনের সাথে পরিবহন ভাতা বাবদ ১০০/- টাকা প্রদান করা হবে।</span>&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৬. &nbsp; &nbsp;আপনার চাকরির যাবতীয় নিয়মাবলী বেপজা নির্দেশিকা ও বাংলাদেশ গেজেট (অতিরিক্ত সংখ্যা), কর্তৃপক্ষ কর্তৃক প্রকাশিত ২০১৯ সালের বেপজা আইন অনুযায়ী পরিচালিত হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৭. &nbsp; &nbsp;৮ (আট) ঘন্টার বেশি কাজ ওভার টাইম হিসেবে গণ্য করা হয়। মূল বেতনের দ্বিগুণ হারে ওভার টাইম হিসাব করে চলতি মাসের বেতনের সাথে ওভার টাইমের টাকা প্রদান করা হয়ে থাকে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৮. &nbsp; &nbsp;কোনো স্থায়ী শ্রমিক স্বেচ্ছায় চাকরি থেকে অব্যাহতি নিতে চাইলে&nbsp;</span><span style='font-size:12px;font-family:"Times New Roman",serif;'>&lsquo;</span><span style="font-size:12px;font-family:SolaimanLipi;">বেপজা আইন ২০১৯</span><span style='font-size:12px;font-family:"Times New Roman",serif;'>&rsquo;</span><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;অনুযায়ী অন্তত ১ (এক) মাস আগে কর্তৃপক্ষকে লিখিতভাবে অবহিত করতে হবে। চাকরির ক্ষেত্রে ছাঁটাই, অপসারণ, বরখাস্ত, চাকুরির অবসান ইত্যাদি বেপজা নির্দেশিকা মোতাবেক করা হবে। যদি কোন শ্রমিক ০১ (এক) মাসের অগ্রিম নোটিশ ব্যতীত চাকুরি হতে অব্যাহতি চায় তাহলে তার ০১ (এক) মাসের মূল বেতনের সমপরিমাণ টাকা কোম্পানি বেপজা নির্দেশিকা অনুযায়ী কর্তন করবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৯. &nbsp; &nbsp;কারখানার কাজের সময়সীমা: সকাল ৭.০০ টা থেকে বিকাল ৪.০০ টা পর্যন্ত মোট ৮ (আট) ঘণ্টা। দুপুরের খাবারের জন্য ০১ (এক) ঘণ্টা বিরতি।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১০. &nbsp; &nbsp;দুপুরের খাবার কোম্পানি নিজ খরচে সরবরাহ করে থাকে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১১. &nbsp; আপনাকে আইডি কার্ড/পাঞ্চ কার্ড প্রদান করা হবে। কারখানায় প্রবেশ এবং প্রস্থানের সময় কার্ড পাঞ্চ করতে হবে এবং সার্বক্ষণিক দৃশ্যমানভাবে গলায় পরিধান করতে হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১২. &nbsp; আপনার চাকরি কোম্পানির প্রচলিত বিধি-বিধান মোতাবেক পরিচালিত হবে। আপনি চাকরিতে অবস্থানকালে কোম্পানির স্বার্থসংক্রান্ত সকল বিষয়ে গোপনীয়তা রক্ষা করতে বাধ্য থাকবেন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৩. &nbsp; কোম্পানির প্রয়োজনে কর্তৃপক্ষ আপনাকে যে কোন বিভাগে স্থানান্তর বা বদলি করতে পারবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৪. &nbsp;বার্ষিক ছুটিসমূহ: (ক) নৈমিত্তিক ছুটি - ১০ দিন, (খ) অসুস্থতাজনিত ছুটি - ১৪ দিন, এবং (গ) অর্জিত ছুটি - ১৭ দিন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৫. &nbsp; বছরে ২টি উৎসব বোনাস বেপজা আইন অনুযায়ী মূল বেতনের সমপরিমাণ প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৬. &nbsp; প্রতি মাসের বেতন পরবর্তী মাসের প্রথম ৭ কর্মদিবসের মধ্যে প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৭. &nbsp; বেপজার নিয়ম অনুসারে বার্ষিক ন্যূনতম মুল বেতনের ৫% থেকে ১০% পর্যন্ত বৃদ্ধি করা হয় ।&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৮. &nbsp; এতদ্বারা উল্লেখ করা হচ্ছে যে, উপরে উল্লিখিত সকল নিয়ম-কানুন বেপজা আইন অনুযায়ী পরিচালিত হবে। এছাড়া, কোম্পানী কর্তৃক উন্নয়নমূলক কোন নিয়ম-কানুন চালু করা হলে তা মেনে চলতে হবে।</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:5.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-size:12px;line-height:107%;font-family:SolaimanLipi;">আমি উল্লেখিত শর্তাবলী মেনে নিয়ে এই নিয়োগপত্রে স্বাক্ষর করে অনুলিপি গ্রহণ করলাম।</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><br></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><br></p>
+            <table style="width: 100%; font-size: 13px; font-family: SolaimanLipi; border-spacing: 0px; margin-right: calc(0%);">
+                <tbody>
+                    <tr>
+                        <td style="text-align: left; width: 50%;"><span style="color: rgb(209, 213, 216);">...............................................................<br></span><span style="line-height: 1.5;">ধন্যবাদান্তে,</span><br><span style="line-height: 1.5;">ব্যবস্থাপনা পরিচালক,</span><br><span style="line-height: 1.5;">এস, জে ইন্ডাস্ট্রিয়াল (বিডি) লিমিটেড</span></td>
+                        <td style="text-align: right; width: 50%;"><br><span style="line-height: 1.5;">স্বাক্ষর: <span style="color: rgb(209, 213, 216);">................................................</span></span><br><br><span style="line-height: 1.5;">পূর্ণ নাম: <span style="color: rgb(209, 213, 216);">..............................................</span></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </body>
+
+    `;
+} else if (transportAllowance === "Yes" && overtime === "No") {
+    // Letter for Transport Allowance: Yes, Overtime: No
+    letter = `
+    
+        
+        <body>
+            <p style='margin:0in;margin-bottom:.0001pt;font-size:15px;font-family:"Calibri",sans-serif;text-align:center;line-height:115%;'><strong><span style="font-size:21px;line-height:115%;font-family:SolaimanLipi;">এস, জে ইন্ডাস্ট্রিয়াল (বিডি) লিমিটেড</span></strong></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px; font-family: SolaimanLipi;">চট্টগ্রাম রপ্তানী প্রক্রিয়াজাতকরণ এলাকা</span></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px;"><span style="font-family: SolaimanLipi;">প্লট #৫৬-৫৭, সেক্টর #০৮, চট্টগ্রাম, বাংলাদেশ</span></span></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px; font-family: SolaimanLipi;">ফোনঃ ০৮৮-০২-৩৩৩৩৪২০৭৫</span></p>
+            <hr>
+            <div style="position: relative; width: 100%; text-align: center;">
+                <p style="display: inline-block; border: 1px solid black; border-radius: 5px; padding: 4px 8px; font-size: 16px; font-family: SolaimanLipi; font-weight: bold; margin: 0px; line-height: 1;">নিয়োগপত্র</p>
+                <p style="position: absolute; right: 0px; top: 0px; font-size: 13px; font-family: SolaimanLipi; margin: 0px; line-height: 1;">তারিখঃ ${date}</p>
+            </div>
+            <p style="margin: 0in 0in 8pt 211.5pt; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -211.5pt; line-height: 1;"><br></p>
+            <table style="width: 100%; font-size: 13px; font-family: SolaimanLipi;">
+                <tbody>
+                    <tr>
+                        <td style="width: 50%; text-align: left;">নাম &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: ${name}</td>
+                        <td style="width: 50%; text-align: left; padding: 5px;">কার্ড নং : ${id}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%; text-align: left;">পিতা/স্বামী : ${fatherHusband}</td>
+                        <td style="width: 50%; text-align: left; padding: 5px;">সেকশন : ${section}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 11pt; font-family: Calibri, sans-serif; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt; font-size: 11pt; font-family: Calibri, sans-serif; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">জনাব/জনাবা,</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:5.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'><span style="font-size:12px;font-family:SolaimanLipi;">আপনার গৃহীত সাক্ষাৎকারের/পরীক্ষার প্রেক্ষিতে আপনাকে ${date} &nbsp;ইং তারিখ থেকে <strong>${designation}</strong> পদে ${section} সেকশনে নিম্নে বর্ণিত শর্ত স্বাপেক্ষে আমাদের শিল্প প্রতিষ্ঠানে নিয়োগ দেয়া হলো -&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১. &nbsp; &nbsp;আপনাকে স্থায়ী পদের বিপরীতে এই নিয়োগপত্র ইস্যুর তারিখ থেকে ৩ (তিন) মাসের জন্য প্রাথমিকভাবে নিয়োগ প্রদান করা হবে। তবে সন্তোষজনক না হলে কর্তৃপক্ষ আরো ৩ (তিন) মাস সময়কাল বৃদ্ধি করতে পারে। এই অস্থায়ী নিয়োগ পর্যায়ে কর্তৃপক্ষ কোন কারণ প্রদর্শন ব্যতীত কিংবা কোন আর্থিক সুবিধা/ক্ষতিপূরণ প্রদান ব্যতীত আপনাকে চাকরিচ্যুত করতে পারে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">২. &nbsp; &nbsp;পরীক্ষাধীন সময় সন্তোষজনকভাবে পরিসমাপ্তির পর আপনি স্থায়ী হিসেবে বিবেচিত হবেন, যা পত্রের মাধ্যমে অবহিত করা হবে।&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৩. &nbsp; &nbsp;আপনি মূল বেতন <strong>${salary.basicSalary}/-</strong> টাকা, বাড়ি ভাড়া <strong>${salary.houseRent}/-</strong> টাকা, চিকিৎসা ভাতা <strong>${salary.medicalAllowance}/-</strong> টাকা সহ সর্বমোট <strong>${salary.totalSalary}/-</strong> টাকা পাবেন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৪. &nbsp; &nbsp;আপনি যদি মাসে একদিনও অনুপস্থিত না থাকেন তাহলে ৩০০/- টাকা হাজিরা ভাতা হিসেবে বেতনের সাথে প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;"><span style="font-size:12px;font-family:SolaimanLipi;">৫. &nbsp; প্রতি মাসে আপনার বেতনের সাথে পরিবহন ভাতা বাবদ ১০০/- টাকা প্রদান করা হবে।</span></span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৬. &nbsp; &nbsp;আপনার চাকরির যাবতীয় নিয়মাবলী বেপজা নির্দেশিকা ও বাংলাদেশ গেজেট (অতিরিক্ত সংখ্যা), কর্তৃপক্ষ কর্তৃক প্রকাশিত ২০১৯ সালের বেপজা আইন অনুযায়ী পরিচালিত হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৭. &nbsp; &nbsp;কোনো স্থায়ী শ্রমিক স্বেচ্ছায় চাকরি থেকে অব্যাহতি নিতে চাইলে&nbsp;</span><span style='font-size:12px;font-family:"Times New Roman",serif;'>&lsquo;</span><span style="font-size:12px;font-family:SolaimanLipi;">বেপজা আইন ২০১৯</span><span style='font-size:12px;font-family:"Times New Roman",serif;'>&rsquo;</span><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;অনুযায়ী অন্তত ১ (এক) মাস আগে কর্তৃপক্ষকে লিখিতভাবে অবহিত করতে হবে। চাকরির ক্ষেত্রে ছাঁটাই, অপসারণ, বরখাস্ত, চাকুরির অবসান ইত্যাদি বেপজা নির্দেশিকা মোতাবেক করা হবে। যদি কোন শ্রমিক ০১ (এক) মাসের অগ্রিম নোটিশ ব্যতীত চাকুরি হতে অব্যাহতি চায় তাহলে তার ০১ (এক) মাসের মূল বেতনের সমপরিমাণ টাকা কোম্পানি বেপজা নির্দেশিকা অনুযায়ী কর্তন করবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৮. &nbsp; &nbsp;কারখানার কাজের সময়সীমা: সকাল ৭.০০ টা থেকে বিকাল ৪.০০ টা পর্যন্ত মোট ৮ (আট) ঘণ্টা। দুপুরের খাবারের জন্য ০১ (এক) ঘণ্টা বিরতি।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৯. &nbsp; &nbsp;দুপুরের খাবার কোম্পানি নিজ খরচে সরবরাহ করে থাকে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১০. &nbsp; আপনাকে আইডি কার্ড/পাঞ্চ কার্ড প্রদান করা হবে। কারখানায় প্রবেশ এবং প্রস্থানের সময় কার্ড পাঞ্চ করতে হবে এবং সার্বক্ষণিক দৃশ্যমানভাবে গলায় পরিধান করতে হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১১. &nbsp; আপনার চাকরি কোম্পানির প্রচলিত বিধি-বিধান মোতাবেক পরিচালিত হবে। আপনি চাকরিতে অবস্থানকালে কোম্পানির স্বার্থসংক্রান্ত সকল বিষয়ে গোপনীয়তা রক্ষা করতে বাধ্য থাকবেন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১২. &nbsp; কোম্পানির প্রয়োজনে কর্তৃপক্ষ আপনাকে যে কোন বিভাগে স্থানান্তর বা বদলি করতে পারবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৩. &nbsp;বার্ষিক ছুটিসমূহ: (ক) নৈমিত্তিক ছুটি - ১০ দিন, (খ) অসুস্থতাজনিত ছুটি - ১৪ দিন, এবং (গ) অর্জিত ছুটি - ১৭ দিন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৪. &nbsp; বছরে ২টি উৎসব বোনাস বেপজা আইন অনুযায়ী মূল বেতনের সমপরিমাণ প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৫. &nbsp; প্রতি মাসের বেতন পরবর্তী মাসের প্রথম ৭ কর্মদিবসের মধ্যে প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৬. &nbsp; বেপজার নিয়ম অনুসারে বার্ষিক ন্যূনতম মুল বেতনের ৫% থেকে ১০% পর্যন্ত বৃদ্ধি করা হয় ।&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৭. &nbsp; এতদ্বারা উল্লেখ করা হচ্ছে যে, উপরে উল্লিখিত সকল নিয়ম-কানুন বেপজা আইন অনুযায়ী পরিচালিত হবে। এছাড়া, কোম্পানী কর্তৃক উন্নয়নমূলক কোন নিয়ম-কানুন চালু করা হলে তা মেনে চলতে হবে।</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:5.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-size:12px;line-height:107%;font-family:SolaimanLipi;">আমি উল্লেখিত শর্তাবলী মেনে নিয়ে এই নিয়োগপত্রে স্বাক্ষর করে অনুলিপি গ্রহণ করলাম।</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><br></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><br></p>
+            <table style="width: 100%; font-size: 13px; font-family: SolaimanLipi; border-spacing: 0px; margin-right: calc(0%);">
+                <tbody>
+                    <tr>
+                        <td style="text-align: left; width: 50%;"><span style="color: rgb(209, 213, 216);">...............................................................<br></span><span style="line-height: 1.5;">ধন্যবাদান্তে,</span><br><span style="line-height: 1.5;">ব্যবস্থাপনা পরিচালক,</span><br><span style="line-height: 1.5;">এস, জে ইন্ডাস্ট্রিয়াল (বিডি) লিমিটেড</span></td>
+                        <td style="text-align: right; width: 50%;"><br><span style="line-height: 1.5;">স্বাক্ষর: <span style="color: rgb(209, 213, 216);">................................................</span></span><br><br><span style="line-height: 1.5;">পূর্ণ নাম: <span style="color: rgb(209, 213, 216);">..............................................</span></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </body>
+
+    `;
+} else if (transportAllowance === "No" && overtime === "No") {
+    // Letter for Transport Allowance: No, Overtime: No
+    letter = `
+    
+       
+        <body>
+            <p style='margin:0in;margin-bottom:.0001pt;font-size:15px;font-family:"Calibri",sans-serif;text-align:center;line-height:115%;'><strong><span style="font-size:21px;line-height:115%;font-family:SolaimanLipi;">এস, জে ইন্ডাস্ট্রিয়াল (বিডি) লিমিটেড</span></strong></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px; font-family: SolaimanLipi;">চট্টগ্রাম রপ্তানী প্রক্রিয়াজাতকরণ এলাকা</span></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px;"><span style="font-family: SolaimanLipi;">প্লট #৫৬-৫৭, সেক্টর #০৮, চট্টগ্রাম, বাংলাদেশ</span></span></p>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 15px; font-family: Calibri, sans-serif; text-align: center; line-height: 1;"><span style="font-size: 14px; font-family: SolaimanLipi;">ফোনঃ ০৮৮-০২-৩৩৩৩৪২০৭৫</span></p>
+            <hr>
+            <div style="position: relative; width: 100%; text-align: center;">
+                <p style="display: inline-block; border: 1px solid black; border-radius: 5px; padding: 4px 8px; font-size: 16px; font-family: SolaimanLipi; font-weight: bold; margin: 0px; line-height: 1;">নিয়োগপত্র</p>
+                <p style="position: absolute; right: 0px; top: 0px; font-size: 13px; font-family: SolaimanLipi; margin: 0px; line-height: 1;">তারিখঃ ${date}</p>
+            </div>
+            <p style="margin: 0in 0in 8pt 211.5pt; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -211.5pt; line-height: 1;"><br></p>
+            <table style="width: 100%; font-size: 13px; font-family: SolaimanLipi;">
+                <tbody>
+                    <tr>
+                        <td style="width: 50%; text-align: left;">নাম &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: ${name}</td>
+                        <td style="width: 50%; text-align: left; padding: 5px;">কার্ড নং : ${id}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%; text-align: left;">পিতা/স্বামী : ${fatherHusband}</td>
+                        <td style="width: 50%; text-align: left; padding: 5px;">সেকশন : ${section}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin: 0in 0in 0.0001pt; font-size: 11pt; font-family: Calibri, sans-serif; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt; font-size: 11pt; font-family: Calibri, sans-serif; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">জনাব/জনাবা,</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:5.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'><span style="font-size:12px;font-family:SolaimanLipi;">আপনার গৃহীত সাক্ষাৎকারের/পরীক্ষার প্রেক্ষিতে আপনাকে ${date} &nbsp;ইং তারিখ থেকে <strong>${designation}</strong> পদে ${section} সেকশনে নিম্নে বর্ণিত শর্ত স্বাপেক্ষে আমাদের শিল্প প্রতিষ্ঠানে নিয়োগ দেয়া হলো -&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১. &nbsp; &nbsp;আপনাকে স্থায়ী পদের বিপরীতে এই নিয়োগপত্র ইস্যুর তারিখ থেকে ৩ (তিন) মাসের জন্য প্রাথমিকভাবে নিয়োগ প্রদান করা হবে। তবে সন্তোষজনক না হলে কর্তৃপক্ষ আরো ৩ (তিন) মাস সময়কাল বৃদ্ধি করতে পারে। এই অস্থায়ী নিয়োগ পর্যায়ে কর্তৃপক্ষ কোন কারণ প্রদর্শন ব্যতীত কিংবা কোন আর্থিক সুবিধা/ক্ষতিপূরণ প্রদান ব্যতীত আপনাকে চাকরিচ্যুত করতে পারে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">২. &nbsp; &nbsp;পরীক্ষাধীন সময় সন্তোষজনকভাবে পরিসমাপ্তির পর আপনি স্থায়ী হিসেবে বিবেচিত হবেন, যা পত্রের মাধ্যমে অবহিত করা হবে।&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৩. &nbsp; &nbsp;আপনি মূল বেতন <strong>${salary.basicSalary}/-</strong> টাকা, বাড়ি ভাড়া <strong>${salary.houseRent}/-</strong> টাকা, চিকিৎসা ভাতা <strong>${salary.medicalAllowance}/-</strong> টাকা সহ সর্বমোট <strong>${salary.totalSalary}/-</strong> টাকা পাবেন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৪. &nbsp; &nbsp;আপনি যদি মাসে একদিনও অনুপস্থিত না থাকেন তাহলে ৩০০/- টাকা হাজিরা ভাতা হিসেবে বেতনের সাথে প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৫. &nbsp; &nbsp;আপনার চাকরির যাবতীয় নিয়মাবলী বেপজা নির্দেশিকা ও বাংলাদেশ গেজেট (অতিরিক্ত সংখ্যা), কর্তৃপক্ষ কর্তৃক প্রকাশিত ২০১৯ সালের বেপজা আইন অনুযায়ী পরিচালিত হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৬. &nbsp; &nbsp;কোনো স্থায়ী শ্রমিক স্বেচ্ছায় চাকরি থেকে অব্যাহতি নিতে চাইলে&nbsp;</span><span style='font-size:12px;font-family:"Times New Roman",serif;'>&lsquo;</span><span style="font-size:12px;font-family:SolaimanLipi;">বেপজা আইন ২০১৯</span><span style='font-size:12px;font-family:"Times New Roman",serif;'>&rsquo;</span><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;অনুযায়ী অন্তত ১ (এক) মাস আগে কর্তৃপক্ষকে লিখিতভাবে অবহিত করতে হবে। চাকরির ক্ষেত্রে ছাঁটাই, অপসারণ, বরখাস্ত, চাকুরির অবসান ইত্যাদি বেপজা নির্দেশিকা মোতাবেক করা হবে। যদি কোন শ্রমিক ০১ (এক) মাসের অগ্রিম নোটিশ ব্যতীত চাকুরি হতে অব্যাহতি চায় তাহলে তার ০১ (এক) মাসের মূল বেতনের সমপরিমাণ টাকা কোম্পানি বেপজা নির্দেশিকা অনুযায়ী কর্তন করবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৭. &nbsp; &nbsp;কারখানার কাজের সময়সীমা: সকাল ৭.০০ টা থেকে বিকাল ৪.০০ টা পর্যন্ত মোট ৮ (আট) ঘণ্টা। দুপুরের খাবারের জন্য ০১ (এক) ঘণ্টা বিরতি।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৮. &nbsp; &nbsp;দুপুরের খাবার কোম্পানি নিজ খরচে সরবরাহ করে থাকে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">৯. &nbsp; আপনাকে আইডি কার্ড/পাঞ্চ কার্ড প্রদান করা হবে। কারখানায় প্রবেশ এবং প্রস্থানের সময় কার্ড পাঞ্চ করতে হবে এবং সার্বক্ষণিক দৃশ্যমানভাবে গলায় পরিধান করতে হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১০. &nbsp; আপনার চাকরি কোম্পানির প্রচলিত বিধি-বিধান মোতাবেক পরিচালিত হবে। আপনি চাকরিতে অবস্থানকালে কোম্পানির স্বার্থসংক্রান্ত সকল বিষয়ে গোপনীয়তা রক্ষা করতে বাধ্য থাকবেন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১১. &nbsp; কোম্পানির প্রয়োজনে কর্তৃপক্ষ আপনাকে যে কোন বিভাগে স্থানান্তর বা বদলি করতে পারবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১২. &nbsp;বার্ষিক ছুটিসমূহ: (ক) নৈমিত্তিক ছুটি - ১০ দিন, (খ) অসুস্থতাজনিত ছুটি - ১৪ দিন, এবং (গ) অর্জিত ছুটি - ১৭ দিন।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৩. &nbsp; বছরে ২টি উৎসব বোনাস বেপজা আইন অনুযায়ী মূল বেতনের সমপরিমাণ প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৪. &nbsp; প্রতি মাসের বেতন পরবর্তী মাসের প্রথম ৭ কর্মদিবসের মধ্যে প্রদান করা হবে।</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৫. &nbsp; বেপজার নিয়ম অনুসারে বার্ষিক ন্যূনতম মুল বেতনের ৫% থেকে ১০% পর্যন্ত বৃদ্ধি করা হয় ।&nbsp;</span></p>
+            <p style="margin: 0in 0in 5pt 0.25in; font-size: 11pt; font-family: Calibri, sans-serif; text-indent: -0.25in; line-height: 1;"><span style="font-size:12px;font-family:SolaimanLipi;">১৬. &nbsp; এতদ্বারা উল্লেখ করা হচ্ছে যে, উপরে উল্লিখিত সকল নিয়ম-কানুন বেপজা আইন অনুযায়ী পরিচালিত হবে। এছাড়া, কোম্পানী কর্তৃক উন্নয়নমূলক কোন নিয়ম-কানুন চালু করা হলে তা মেনে চলতে হবে।</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:5.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'><span style="font-size:12px;font-family:SolaimanLipi;">&nbsp;</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><span style="font-size:12px;line-height:107%;font-family:SolaimanLipi;">আমি উল্লেখিত শর্তাবলী মেনে নিয়ে এই নিয়োগপত্রে স্বাক্ষর করে অনুলিপি গ্রহণ করলাম।</span></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><br></p>
+            <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;font-size:11.0pt;font-family:"Calibri",sans-serif;'><br></p>
+            <table style="width: 100%; font-size: 13px; font-family: SolaimanLipi; border-spacing: 0px; margin-right: calc(0%);">
+                <tbody>
+                    <tr>
+                        <td style="text-align: left; width: 50%;"><span style="color: rgb(209, 213, 216);">...............................................................<br></span><span style="line-height: 1.5;">ধন্যবাদান্তে,</span><br><span style="line-height: 1.5;">ব্যবস্থাপনা পরিচালক,</span><br><span style="line-height: 1.5;">এস, জে ইন্ডাস্ট্রিয়াল (বিডি) লিমিটেড</span></td>
+                        <td style="text-align: right; width: 50%;"><br><span style="line-height: 1.5;">স্বাক্ষর: <span style="color: rgb(209, 213, 216);">................................................</span></span><br><br><span style="line-height: 1.5;">পূর্ণ নাম: <span style="color: rgb(209, 213, 216);">..............................................</span></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </body>
+
+    `;
+}
+
+    // Display the generated letter
+    document.getElementById('output').innerHTML = letter;
+}
+
+
+        // Function to download as PDF
+        function downloadPDF() {
+            const element = document.getElementById('output');
+            const opt = {
+                margin: 10,
+                filename: 'appointment_letter.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Generate PDF
+            html2pdf().set(opt).from(element).save();
+        }
+
+        // Function to download as Word
+        async function downloadWord() {
+            // Fetch the template .docx file
+            const response = await fetch('template.docx'); // Replace with the path to your template file
+            const templateFile = await response.arrayBuffer();
+
+            // Prepare the data to replace placeholders in the template
+            const data = {
+                name: document.getElementById('name').value,
+                id: document.getElementById('id').value,
+                date: formatDate(document.getElementById('date').value),
+                designation: document.getElementById('designation').value,
+                section: document.getElementById('section').value,
+                fatherHusband: document.getElementById('fatherHusband').value,
+                totalSalary: document.getElementById('totalSalary').value,
+                // Add more fields as needed
+            };
+
+            // Load the template into docxtemplater
+            const zip = new PizZip(templateFile);
+            const doc = new Docxtemplater().loadZip(zip);
+
+            // Replace placeholders with data
+            doc.setData(data);
+
+            try {
+                // Render the document
+                doc.render();
+            } catch (error) {
+                console.error("Error rendering document:", error);
+                return;
+            }
+
+            // Generate the .docx file
+            const out = doc.getZip().generate({ type: 'blob' });
+
+            // Save the file
+            saveAs(out, 'appointment_letter.docx');
+        }
+
+        // Function to print the letter
+        function printLetter() {
+            const printContents = document.getElementById('output').innerHTML;
+            const originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload(); // Reload to restore the original content
+        }
+    </script>
+</body>
+</html>
